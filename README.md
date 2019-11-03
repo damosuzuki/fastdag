@@ -16,7 +16,7 @@ Services with significant fan-out and munging also perform pitifully unless IO i
 A `Graph` is `fastdag`'s representation of data flow, based on the concept of a [Directed Acyclic Graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph#Data_processing_networks)
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Topological_Ordering.svg/1920px-Topological_Ordering.svg.png" alt="Simple Directed Acyclic Graph Example" width="200"/>
 
-A graph with nodes connected in one direction with no cycles. `fastdag` doesn't actually use graph theory in its implementation, but the concept is useful as a mental model of the data flow. Note that a DAG can have more than one root and more than one leaf despite the simple example above.
+A graph with nodes connected in one direction with no cycles. `fastdag` doesn't actually use graph theory algorithms in its implementation, but the concept is useful as a mental model of the data flow. Note that a DAG can have more than one root and more than one leaf despite the simple example above.
 
 ## Graph.resolve(context)
 This triggers the data flow. All data will be available in the context object when execution is complete.
