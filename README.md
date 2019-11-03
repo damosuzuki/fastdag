@@ -18,15 +18,31 @@ A `Graph` is `fastdag`'s representation of data flow, based on the concept of a 
 
 A graph with nodes connected in one direction with no cycles. `fastdag` doesn't actually use graph theory algorithms in its implementation, but the concept is useful as a mental model of the data flow. Note that a DAG can have more than one root and more than one leaf despite the simple example above.
 
-## Graph.resolve(context)
+### `Graph.exec(context)`
 This triggers the data flow. All data will be available in the context object when execution is complete.
 
-## Node
+## `Context`
 
-A `Node` can take data and/or produce data. If it is a root then the node doesn't take data. Leaf nodes can produce data which become the output of `Graph.resolve()`.
+As data flows through the graph, the context maintains a record of the data produced by each node, as well as a merged view of the data. Nodes do not interact directly with the context but 
 
-## Context
+### `Context.data`
+The merged view of data that is the output of the executed graph.
 
-As data flows through the graph, the context maintains a record of the data produced by each node, as well as a merged view of the data. 
+### `Context.nodeData[id]`
+A map of data produced by each node in the graph.
+
+## `Node`
+
+A `Node` can take data and/or produce data. If it is a root then the node doesn't take data. Leaf nodes can produce data which become the final addition to the context.
+
+### `Node.id` 
+Identifier for the node.
+
+### `Node.resolve(data)`
+Takes the merged data from ancestors (nodes it depends) and optionally returns data tha will be forwarded to descendents (downstream nodes).
+
+
+
+
 
 
