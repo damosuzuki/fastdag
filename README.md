@@ -1,3 +1,5 @@
+![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg)
+
 # fastdag
 Async data flow-control for real-time data processing and aggregation.
 
