@@ -18,16 +18,12 @@ A `Graph` is `fastdag`'s representation of data flow, based on the concept of a 
 
 A graph with nodes connected in one direction with no cycles. `fastdag` doesn't actually use graph theory algorithms in its implementation, but the concept is useful as a mental model of the data flow. Note that a DAG can have more than one root and more than one leaf despite the simple example above.
 
-### `Graph.exec(context)`
-This triggers the data flow and returns a tuple containing a map of the data produced by each node in the graph (`node_data`) and a merged view of all output data (`merged`). A context can also be provided that exposes access to state and methods to all nodes in the graph. 
+### `add_root(id)`
+Adds a root node to the graph. The graph needs to keep track of root nodes in order to kick off execution of the data flow. All other nodes should be added using the `Node` `add_parent` and `add_child` methods before or after calling `add_root`.
 
-## `Context`
+### `run(context)`
+This triggers the data flow and returns a tuple containing a map of the data produced by each node in the graph (`node_data`) and a merged view of all output data (`merged`). A context can also be provided that can be any value. It is typically an instance of a class that exposes access to state and methods needed by nodes in the graph (request id is a common use case).
 
-Nodes may need information associated with this particular graph execution (request id is a common use case), and the context provides a mechanism to expose such data and/or methods (eg. get_request_id()).
-
-
-### `Context.node_data[id]`
-A .
 
 ## `Node`
 
@@ -43,11 +39,13 @@ Adds `parent_node` as an ancestor of the node, using `argument_name` when passin
 Identifier for the node.
 
 ### `load(context, [named data arguments])`
-Takes data from ancestors (nodes it depends on) and optionally returns data that will be forwarded to descendents (downstream nodes). The resolve method should be implemented with named arguments so that the parent node data can be forwarded in the expected position. Without named arguments the data will forwarded in the order they were received.
+Takes the context (value passed to `Graph.run()`) and data from ancestors (nodes it depends on) and optionally returns data that will be forwarded to descendents (downstream nodes). The resolve method should be implemented with named arguments so that the parent node data can be forwarded in the expected position. Without named arguments the data will forwarded as argument parameters after `context` in the order they were received.
 
 ## `@add_parent(id, argument_name)`
 Decorator that can be applied to a `Node` class that specifies a parent node by id, and the argument name to use when passing the parent's data to the `resolve` method.
 
+## `@add_child(id, argument_name)`
+Decorator that can be applied to a `Node` class that specifies a child node by id, and the argument name to use when passing the node's data to the child's `resolve` method.
 
 
 
