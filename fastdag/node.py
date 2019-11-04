@@ -25,12 +25,16 @@ class Node:
         # TODO support positional args
         context = kwargs["context"]
         data_args = {}
-        for parent in parents:
+        for parent in self.parents:
             name = parent.id + "|" + self.id
+            # Abort if we are missing data from parent
+            # TODO: handle this upstream
+            if kwargs[name] == None:
+                return None
             data_args[name] = kwargs[name]
         self._input_data = data_args
         self._output_data = self.load(context, data_args)
-        # TODO invoke children
+        return self._output_data
     
     def load(self, context, data_args: dict):
-        pass
+        return None

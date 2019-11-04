@@ -1,5 +1,7 @@
+from typing import Optional, List, Dict
+
 import gevent
-import fastdag.node
+from fastdag.node import Node
 
 class Graph:
     __doc__ = """ A `Graph` is `fastdag`'s representation of data flow, based on
@@ -14,12 +16,23 @@ class Graph:
         self.id = id
         self.roots += roots
 
-    def _wrap(self, node, context):
-        
+    # load the nodes of the graph with a breadth first traversal 
+    # Call load on all roots
+    # For each child of each root:
+    #   If child has all of the data it needs:
+    #       Call its load function
+    #       Store its data
+    #   Once all children are loaded, load the next level
+    
+    def _load_level(self, nodes: List[Node]):
+        # TODO
+        pass
     
     def add_root(self, node: Node):
         self.roots.append(node)
     
     def run(self, context):
-        spawn_list = [gevent.spawn(node.load) for node in self.roots]
-        gevent.joinall(spawn_list)
+        jobs = [gevent.spawn(node._load) for node in self.roots]
+        gevent.joinall(jobs)
+
+        
